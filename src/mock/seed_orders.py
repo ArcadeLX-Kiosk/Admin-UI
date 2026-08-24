@@ -1,6 +1,18 @@
+import json
+import re
 
+def update_file(filename, replacement_map):
+    with open(filename, 'r', encoding='utf-8') as f:
+        content = f.read()
 
-export const MOCK_ORDERS: any[] = [
+    for pattern, new_val in replacement_map.items():
+        content = re.sub(pattern, new_val, content)
+
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+# 1. Orders
+orders = """export const MOCK_ORDERS: any[] = [
   {
     id: 'ord-1001',
     orderNumber: 'ORD-2026-08-1001',
@@ -123,6 +135,8 @@ export const MOCK_ORDERS: any[] = [
     createdAt: '2026-08-23T08:00:00Z',
     requestedDate: '2026-08-23T08:00:00Z'
   }
-];
+];"""
 
-
+update_file('src/mock/orderData.ts', {
+    r'export const MOCK_ORDERS: any\[\] = \[[\s\S]*?\n\];': orders
+})

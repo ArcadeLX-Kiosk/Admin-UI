@@ -93,9 +93,9 @@ export function PartnerSettlementsList() {
                   <TableRow key={s.id}>
                     <TableCell className="font-mono text-sm">{s.settlementNumber}</TableCell>
                     <TableCell>{MONTHS.find(m => m.value === s.periodMonth)?.label} {s.periodYear}</TableCell>
-                    <TableCell className="text-right text-slate-500">?{base.toLocaleString('en-IN')}</TableCell>
-                    <TableCell className="text-right text-slate-500 text-sm">?{gst.toLocaleString('en-IN')}</TableCell>
-                    <TableCell className="text-right text-indigo-600 font-bold">?{total.toLocaleString('en-IN')}</TableCell>
+                    <TableCell className="text-right text-slate-500">₹{base.toLocaleString('en-IN')}</TableCell>
+                    <TableCell className="text-right text-slate-500 text-sm">₹{gst.toLocaleString('en-IN')}</TableCell>
+                    <TableCell className="text-right text-indigo-600 font-bold">₹{total.toLocaleString('en-IN')}</TableCell>
                     <TableCell><SettlementStatusBadge status={s.status} /></TableCell>
                     <TableCell className="text-right">
                       <Button variant="outline" size="sm" onClick={() => navigate('/partner/settlements/' + s.id)}>

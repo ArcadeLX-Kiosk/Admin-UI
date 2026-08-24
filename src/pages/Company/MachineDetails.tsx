@@ -17,7 +17,7 @@ export function MachineDetails() {
   const { machines, assignments, timelines, assignMachine, updateMachineStatus } = useMachine();
   const { distributors, partners } = useOrg();
   const { transactions, getMachineAggregation } = useRevenue();
-  
+
   const machine = machines.find(m => m.id === id);
   const history = assignments.filter(a => a.machineId === id).sort((a, b) => new Date(b.assignedAt).getTime() - new Date(a.assignedAt).getTime());
   const timeline = timelines.filter(t => t.machineId === id).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
@@ -73,7 +73,7 @@ export function MachineDetails() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        
+
         {/* Left Column: Specs & Assignment */}
         <div className="space-y-6 xl:col-span-2">
           <Card>
@@ -125,7 +125,7 @@ export function MachineDetails() {
                     <div>
                       <p className="text-sm font-medium text-indigo-900 mb-1">Assigned to Distributor</p>
                       <p className="text-lg font-bold text-indigo-700">{getDistributorName(machine.distributorId)}</p>
-                      
+
                       {machine.partnerId && (
                         <div className="mt-4 pl-4 border-l-2 border-indigo-200">
                           <p className="text-xs font-medium text-indigo-800/70 mb-1">Deployed to Partner</p>
@@ -186,7 +186,7 @@ export function MachineDetails() {
               )}
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Revenue Aggregation</CardTitle>
@@ -236,14 +236,14 @@ export function MachineDetails() {
 
         {/* Right Column: Telemetry & Actions */}
         <div className="space-y-6">
-          
+
           <Card>
             <CardHeader>
               <CardTitle>Manual Actions</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <Select 
+                <Select
                   label="Override Status"
                   value={machine.status}
                   onChange={handleStatusChange}
@@ -288,7 +288,7 @@ export function MachineDetails() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-slate-500">IP Address</span>
-                  <span className="text-sm font-mono text-slate-900">{machine.ipAddress || 'Unknown'}</span>
+                  <span className="text-sm font-mono text-slate-900">{machine.ipAddress || 'TimeZone Distribution'}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-slate-500">Firmware</span>
@@ -338,10 +338,10 @@ export function MachineDetails() {
             <span className="font-bold font-mono">{machine.machineCode}</span>
           </div>
 
-          <Select 
+          <Select
             required
-            label="Assign to Distributor" 
-            value={selectedDistributor} 
+            label="Assign to Distributor"
+            value={selectedDistributor}
             onChange={(e) => {
               setSelectedDistributor(e.target.value);
               setSelectedPartner('');
@@ -352,9 +352,9 @@ export function MachineDetails() {
             ]}
           />
 
-          <Select 
-            label="Assign to Partner (Optional)" 
-            value={selectedPartner} 
+          <Select
+            label="Assign to Partner (Optional)"
+            value={selectedPartner}
             onChange={(e) => setSelectedPartner(e.target.value)}
             disabled={!selectedDistributor}
             options={[
@@ -364,7 +364,7 @@ export function MachineDetails() {
                 .map(p => ({ label: p.businessName, value: p.id }))
             ]}
           />
-          
+
           <p className="text-xs text-slate-500">
             Note: Assigning this machine will complete any existing active assignments and update the machine's status.
           </p>

@@ -20,11 +20,11 @@ export function CompanySettings() {
         <CardContent className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Company Name</label>
-            <input type="text" className="w-full max-w-md rounded-md border-slate-300 shadow-sm px-3 py-2 border" defaultValue="Kiosk Management Platform" />
+            <input type="text" className="w-full max-w-md rounded-md border-slate-300 shadow-sm px-3 py-2 border" defaultValue="Nilee Games" />
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Support Email</label>
-            <input type="email" className="w-full max-w-md rounded-md border-slate-300 shadow-sm px-3 py-2 border" defaultValue="support@kioskplatform.demo" />
+            <input type="email" className="w-full max-w-md rounded-md border-slate-300 shadow-sm px-3 py-2 border" defaultValue="NileeGames@gamil.com" />
           </div>
         </CardContent>
       </Card>
@@ -50,7 +50,7 @@ export function CompanySettings() {
           </div>
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Security</CardTitle>

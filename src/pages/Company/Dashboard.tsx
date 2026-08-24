@@ -22,14 +22,14 @@ export function CompanyDashboard() {
   const totalGrossRevenue = machines.reduce((acc, curr) => acc + (curr.totalRevenue || 0), 0);
   const activeMachines = machines.filter(m => m.status === 'active' || m.status === 'installed').length;
   const activeDistributors = distributors.filter(d => d.status === 'active').length;
-  
+
   const pendingOrders = orders.filter(o => o.status === 'requested').length;
   const pendingSettlements = settlements.filter((s: any) => s.status === 'payment_pending').length;
-  
+
   const totalReceivables = receivables.filter(r => r.status === 'payment_pending').reduce((acc, curr) => acc + curr.amount, 0);
-  
+
   const totalDistributorEntitlement = settlements.filter(s => s.status === 'approved' || s.status === 'paid').reduce((acc: any, curr: any) => acc + curr.distributorShareAmount, 0);
-  
+
   const companyRetainedRevenue = settlements.reduce((acc: any, curr: any) => acc + curr.companyShareAmount, 0);
 
   // Revenue Trend (Mock Monthly)
@@ -48,7 +48,7 @@ export function CompanyDashboard() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Executive Overview</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Business Overview</h1>
           <p className="text-slate-500">Business performance across all distributors and machines.</p>
         </div>
       </div>
@@ -117,14 +117,14 @@ export function CompanyDashboard() {
                 <BarChart data={revenueData}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                   <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                  <YAxis 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tickFormatter={(value) => `₹${(value / 100000).toFixed(1)}L`} 
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tickFormatter={(value) => `₹${(value / 100000).toFixed(1)}L`}
                   />
-                  <Tooltip 
+                  <Tooltip
                     formatter={(value: any) => [`₹${value.toLocaleString('en-IN')}`, 'Revenue']}
-                    cursor={{fill: '#f8fafc'}}
+                    cursor={{ fill: '#f8fafc' }}
                   />
                   <Bar dataKey="revenue" fill="#4f46e5" radius={[4, 4, 0, 0]} />
                 </BarChart>

@@ -6,7 +6,7 @@ export const MOCK_PARTNERS: Partner[] = [
     "distributorId": "dist-1",
     "businessName": "Nexus Gaming Center",
     "contactPerson": "Karan Patel",
-    "email": "karan@nexusgaming.demo",
+    "email": "Karan Patel@gmail.com",
     "phone": "+91 91111 22222",
     "gstNumber": "24ABCDE1234P1Z5",
     "address": "Alpha Mall, 3rd Floor",

@@ -27,28 +27,28 @@ export const RevenueProvider: React.FC<{ children: ReactNode }> = ({ children })
       paymentSource: 'Razorpay Demo',
       createdAt: new Date().toISOString(),
     };
-    
+
     setTransactions(prev => [newTransaction, ...prev]);
   };
 
   const getMachineAggregation = (machineId: string): MachineRevenueAggregation => {
     const machineTx = transactions.filter(t => t.machineId === machineId && t.paymentStatus === 'successful');
     const now = new Date();
-    
+
     let total = 0, today = 0, week = 0, month = 0;
-    
+
     machineTx.forEach(t => {
       total += t.amount;
       const txDate = new Date(t.transactionDate);
       const daysDiff = (now.getTime() - txDate.getTime()) / (1000 * 3600 * 24);
-      
+
       if (daysDiff <= 1 && txDate.getDate() === now.getDate()) today += t.amount;
       if (daysDiff <= 7) week += t.amount;
       if (txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear()) month += t.amount;
     });
 
-    const lastDate = machineTx.length > 0 
-      ? machineTx.sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())[0].transactionDate 
+    const lastDate = machineTx.length > 0
+      ? machineTx.sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())[0].transactionDate
       : null;
 
     return {

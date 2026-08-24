@@ -25,7 +25,7 @@ export function PartnerDashboard() {
     .filter(r => r.partnerId === user?.id && r.status === 'payment_pending')
     .reduce((acc, curr) => acc + curr.amount, 0);
   
-  const receivedFromDistributor = payments.filter(p => p.recipientId === user?.id && p.status === 'paid').reduce((acc, curr) => acc + curr.amount, 0);
+  const receivedFromCompany = payments.filter(p => p.recipientId === user?.id && p.status === 'paid').reduce((acc, curr) => acc + curr.amount, 0);
   
   // Revenue Trend (Mock Monthly) - using Partner Entitlement
   const revenueData = [
@@ -57,9 +57,9 @@ export function PartnerDashboard() {
         />
         <StatCard
           title="Amount Received"
-          value={`₹${receivedFromDistributor.toLocaleString('en-IN')}`}
+          value={`₹${receivedFromCompany.toLocaleString('en-IN')}`}
           icon={<CheckCircle2 className="w-6 h-6 text-emerald-600" />}
-          description="Paid by Distributor"
+          description="Paid by Company"
         />
         <StatCard
           title="Pending Settlements"
@@ -128,3 +128,4 @@ export function PartnerDashboard() {
     </div>
   );
 }
+

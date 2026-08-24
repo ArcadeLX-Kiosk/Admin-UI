@@ -6,7 +6,7 @@ interface MachineContextType {
   machines: Machine[];
   assignments: MachineAssignmentEvent[];
   timelines: MachineTimelineEvent[];
-  
+
   addMachine: (machine: Omit<Machine, 'id' | 'createdAt' | 'updatedAt' | 'machineCode'>) => void;
   updateMachineStatus: (id: string, status: MachineStatus) => void;
   assignMachine: (machineId: string, distributorId: string, partnerId?: string) => void;
@@ -34,7 +34,7 @@ export function MachineProvider({ children }: { children: ReactNode }) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    
+
     setMachines([...machines, newMachine]);
     addTimelineEvent(newMachine.id, 'Machine Registered', 'System', 'Initial registration in Company Inventory');
   };
@@ -46,8 +46,8 @@ export function MachineProvider({ children }: { children: ReactNode }) {
 
   const assignMachine = (machineId: string, distributorId: string, partnerId?: string) => {
     // Complete previous active assignment
-    setAssignments(prev => prev.map(a => 
-      a.machineId === machineId && a.status === 'active' 
+    setAssignments(prev => prev.map(a =>
+      a.machineId === machineId && a.status === 'active'
         ? { ...a, status: 'completed', returnedAt: new Date().toISOString() }
         : a
     ));
@@ -65,9 +65,9 @@ export function MachineProvider({ children }: { children: ReactNode }) {
 
     // Update machine
     const newStatus = partnerId ? 'assigned_to_partner' : 'assigned_to_distributor';
-    setMachines(prev => prev.map(m => 
-      m.id === machineId 
-        ? { ...m, distributorId, partnerId: partnerId || null, status: newStatus, updatedAt: new Date().toISOString() } 
+    setMachines(prev => prev.map(m =>
+      m.id === machineId
+        ? { ...m, distributorId, partnerId: partnerId || null, status: newStatus, updatedAt: new Date().toISOString() }
         : m
     ));
 

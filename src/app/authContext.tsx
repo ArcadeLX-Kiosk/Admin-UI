@@ -13,22 +13,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const MOCK_USERS: Record<Role, User> = {
   company: {
     id: 'comp-1',
-    name: 'Admin User',
-    email: 'admin@company.demo',
+    name: 'Nilee Games',
+    email: 'NileeGames@gamil.com',
     role: 'company',
     organizationId: 'org-company',
   },
   distributor: {
     id: 'dist-1',
-    name: 'Distributor Demo',
-    email: 'demo@distributor.demo',
+    name: 'Vishwas Rakshe',
+    email: 'VishwasRakshe@gmail.com',
     role: 'distributor',
     organizationId: 'org-dist-1',
   },
   partner: {
     id: 'part-1',
-    name: 'Partner Demo',
-    email: 'demo@partner.demo',
+    name: 'Karan Patel',
+    email: 'Karan Patel@gmail.com',
     role: 'partner',
     organizationId: 'org-part-1',
   },

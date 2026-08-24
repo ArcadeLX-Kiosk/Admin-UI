@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { SupportTicket, SupportReply } from '../types/support';
+import { MOCK_TICKETS, MOCK_REPLIES } from './supportData';
 
 interface SupportContextType {
   tickets: SupportTicket[];
@@ -12,8 +13,8 @@ interface SupportContextType {
 const SupportContext = createContext<SupportContextType | undefined>(undefined);
 
 export function SupportProvider({ children }: { children: ReactNode }) {
-  const [tickets, setTickets] = useState<SupportTicket[]>([]);
-  const [replies, setReplies] = useState<SupportReply[]>([]);
+  const [tickets, setTickets] = useState<SupportTicket[]>(MOCK_TICKETS);
+  const [replies, setReplies] = useState<SupportReply[]>(MOCK_REPLIES);
 
   const createTicket = (t: Omit<SupportTicket, 'id' | 'createdAt' | 'updatedAt' | 'status'>) => {
     const newTicket: SupportTicket = {
@@ -54,3 +55,4 @@ export function useSupport() {
   }
   return context;
 }
+

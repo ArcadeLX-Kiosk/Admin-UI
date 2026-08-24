@@ -40,12 +40,12 @@ export function CompanyPaymentsList() {
                 const distributor = distributors.find(d => d.id === pay.recipientId);
                 const settlement = settlements.find(s => s.id === pay.settlementId);
                 const date = new Date(pay.paidAt).toLocaleDateString();
-                
+
                 return (
                   <TableRow key={pay.id}>
                     <TableCell className="font-mono text-sm">{pay.transactionReference}</TableCell>
                     <TableCell className="text-sm">{date}</TableCell>
-                    <TableCell className="font-medium">{distributor?.businessName || 'Unknown'}</TableCell>
+                    <TableCell className="font-medium">{distributor?.businessName || 'TimeZone Distribution'}</TableCell>
                     <TableCell className="font-mono text-sm">{settlement?.settlementNumber}</TableCell>
                     <TableCell className="text-sm capitalize">{pay.paymentMethod.replace('_', ' ')}</TableCell>
                     <TableCell className="text-right font-bold text-slate-900">₹{pay.amount.toLocaleString()}</TableCell>

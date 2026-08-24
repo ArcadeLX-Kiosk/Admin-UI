@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { ArrowDownLeft, FileText, Calendar } from 'lucide-react';
 import { useSettlement } from '../../mock/settlementContext';
 import { useAuth } from '../../app/authContext';
@@ -89,3 +89,4 @@ export function PartnerPaymentsList() {
     </div>
   );
 }
+

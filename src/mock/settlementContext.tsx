@@ -13,11 +13,11 @@ interface SettlementContextType {
   partnerSettlements: DistributorPartnerSettlement[];
   partnerReceivables: PartnerReceivable[];
   payments: PaymentRecord[];
-  
+
   generateSettlement: (distributorId: string, month: number, year: number) => CompanyDistributorSettlement | null;
   advanceStatus: (id: string, newStatus: SettlementStatus) => void;
   markCompanySettlementPaid: (id: string, method: string, ref: string) => void;
-  
+
   generatePartnerSettlement: (distributorId: string, partnerId: string, month: number, year: number) => DistributorPartnerSettlement | null;
   advancePartnerStatus: (id: string, newStatus: SettlementStatus) => void;
   markPartnerSettlementPaid: (id: string, method: string, ref: string) => void;
@@ -31,7 +31,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
   const [partnerSettlements, setPartnerSettlements] = useState<DistributorPartnerSettlement[]>(MOCK_PARTNER_SETTLEMENTS);
   const [partnerReceivables, setPartnerReceivables] = useState<PartnerReceivable[]>(MOCK_PARTNER_RECEIVABLES);
   const [payments, setPayments] = useState<PaymentRecord[]>(MOCK_PAYMENTS);
-  
+
   const { distributors, companyDistributorAgreements, distributorPartnerAgreements } = useOrg();
   const { transactions } = useRevenue();
   const { machines } = useMachine();
@@ -69,7 +69,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
 
     applicableTransactions.forEach(t => {
       grossTotal += t.amount;
-      
+
       if (!breakdownMap.has(t.machineId)) {
         breakdownMap.set(t.machineId, {
           machineId: t.machineId,
@@ -93,7 +93,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     breakdownMap.forEach(bd => {
       bd.companyShareAmount = bd.grossRevenue * (agreement.companySharePercent / 100);
       bd.distributorShareAmount = bd.grossRevenue * (agreement.distributorSharePercent / 100);
-      
+
       compTotal += bd.companyShareAmount;
       distTotal += bd.distributorShareAmount;
     });
@@ -108,20 +108,20 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       distributorName: distributor.businessName,
       periodMonth: month,
       periodYear: year,
-      
+
       agreementId: agreement.id,
       agreementVersion: agreement.version ? agreement.version.toString() : '1',
       companySharePercent: agreement.companySharePercent,
       distributorSharePercent: agreement.distributorSharePercent,
-      
+
       grossRevenue: grossTotal,
       companyShareAmount: compTotal,
       distributorShareAmount: distTotal,
       gstAmount: gst,
       totalAmount: total,
-      
+
       machineBreakdown: Array.from(breakdownMap.values()),
-      
+
       status: 'requested',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -148,7 +148,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
 
     setSettlements(prev => prev.map(s => {
       if (s.id !== id) return s;
-      
+
       if (newStatus === 'approved' && s.status !== 'approved') {
         const newRec: DistributorReceivable = {
           id: "rec-" + Date.now(),
@@ -169,7 +169,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
           entityId: id,
           distributorId: s.distributorId
         });
-        
+
         addNotification({
           recipientId: s.distributorId,
           title: 'Settlement Approved',
@@ -179,7 +179,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
           relatedEntityType: 'settlement'
         });
       }
-      
+
       return { ...s, status: newStatus, updatedAt: new Date().toISOString() };
     }));
   };
@@ -204,7 +204,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       status: 'paid',
       paidAt: new Date().toISOString()
     };
-    
+
     setPayments(p => [newPayment, ...p]);
 
     addAuditLog({
@@ -216,7 +216,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       entityId: newPayment.id,
       distributorId: settlement.distributorId
     });
-    
+
     addNotification({
       recipientId: settlement.distributorId,
       title: 'Payment Received from Company',
@@ -233,7 +233,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     if (!compSettlement) {
       throw new Error("Cannot request Partner Settlement because no underlying Company Settlement exists for this period.");
     }
-    
+
     if (compSettlement.status === 'draft' || compSettlement.status === 'requested' || compSettlement.status === 'under_review' || compSettlement.status === 'generated' || compSettlement.status === 'verified') {
       throw new Error("Underlying Company Settlement must be at least Approved to calculate Partner shares securely.");
     }
@@ -255,7 +255,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     const partnerMachineIds = new Set(partnerMachines.map(m => m.id));
 
     const applicableMachineBreakdowns = compSettlement.machineBreakdown.filter(mb => partnerMachineIds.has(mb.machineId));
-    
+
     if (applicableMachineBreakdowns.length === 0) {
       throw new Error("No eligible machine revenue exists for this Partner in the selected period.");
     }
@@ -271,16 +271,16 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
 
       const distRetained = baseEligible * (agreement.distributorSharePercent / 100);
       const partPayable = baseEligible * (agreement.partnerSharePercent / 100);
-      
+
       distRetainedTotal += distRetained;
       partPayableTotal += partPayable;
 
       partnerBreakdown.push({
         machineId: mb.machineId,
         machineCode: mb.machineCode,
-        grossRevenue: mb.grossRevenue, 
-        companyShareAmount: distRetained, 
-        distributorShareAmount: partPayable, 
+        grossRevenue: mb.grossRevenue,
+        companyShareAmount: distRetained,
+        distributorShareAmount: partPayable,
         transactionCount: mb.transactionCount
       });
     });
@@ -294,23 +294,23 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       companySettlementId: compSettlement.id,
       distributorId,
       partnerId,
-      partnerName: partnerMachines[0]?.partnerId || 'Unknown Partner', 
+      partnerName: partnerMachines[0]?.partnerId || 'TimeZone Distribution Partner',
       periodMonth: month,
       periodYear: year,
-      
+
       agreementId: agreement.id,
       agreementVersion: agreement.version ? agreement.version.toString() : '1',
       distributorSharePercent: agreement.distributorSharePercent,
       partnerSharePercent: agreement.partnerSharePercent,
-      
+
       eligibleRevenue: totalEligibleRevenue,
       distributorRetainedAmount: distRetainedTotal,
       partnerPayableAmount: partPayableTotal,
       gstAmount: gst,
       totalAmount: total,
-      
+
       machineBreakdown: partnerBreakdown,
-      
+
       status: 'requested',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -335,7 +335,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
   const advancePartnerStatus = (id: string, newStatus: SettlementStatus) => {
     setPartnerSettlements(prev => prev.map(s => {
       if (s.id !== id) return s;
-      
+
       if (newStatus === 'approved' && s.status !== 'approved') {
         const newRec: PartnerReceivable = {
           id: "rec-p-" + Date.now(),
@@ -358,7 +358,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
           distributorId: s.distributorId,
           partnerId: s.partnerId
         });
-        
+
         addNotification({
           recipientId: s.partnerId,
           title: 'Partner Settlement Approved',
@@ -368,7 +368,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
           relatedEntityType: 'settlement'
         });
       }
-      
+
       return { ...s, status: newStatus, updatedAt: new Date().toISOString() };
     }));
   };
@@ -381,7 +381,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
 
     setPartnerSettlements(prev => prev.map(s => s.id === id ? { ...s, status: 'paid', updatedAt: new Date().toISOString() } : s));
     setPartnerReceivables(prev => prev.map(r => r.settlementId === id ? { ...r, status: 'paid' } : r));
-    
+
     const newPayment: PaymentRecord = {
       id: "PAY-P-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
       settlementId: id,
@@ -393,7 +393,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       status: 'paid',
       paidAt: new Date().toISOString()
     };
-    
+
     setPayments(p => [newPayment, ...p]);
 
     addAuditLog({
@@ -406,7 +406,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       distributorId: settlement.distributorId,
       partnerId: settlement.partnerId
     });
-    
+
     addNotification({
       recipientId: settlement.partnerId,
       title: 'Payment Received from Company',
@@ -418,10 +418,10 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
   };
 
   return (
-    <SettlementContext.Provider value={{ 
+    <SettlementContext.Provider value={{
       settlements, receivables, partnerSettlements, partnerReceivables, payments,
       generateSettlement, advanceStatus, markCompanySettlementPaid,
-      generatePartnerSettlement, advancePartnerStatus, markPartnerSettlementPaid 
+      generatePartnerSettlement, advancePartnerStatus, markPartnerSettlementPaid
     }}>
       {children}
     </SettlementContext.Provider>
