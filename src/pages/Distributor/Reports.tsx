@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useAuth } from '../../app/authContext';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/Table';
@@ -6,19 +6,29 @@ import { Button } from '../../components/ui/Button';
 import { Select } from '../../components/ui/Select';
 import { Download, FileText } from 'lucide-react';
 import { useMachine } from '../../mock/machineContext';
-import { useSettlement } from '../../mock/settlementContext';
+import { useOrg } from '../../mock/orgContext';
 
 export function DistributorReports() {
   const { user } = useAuth();
-  const [reportType, setReportType] = useState('revenue');
+  const [partnerFilter, setPartnerFilter] = useState('all');
   const [month, setMonth] = useState('8');
   
   const { machines } = useMachine();
-  const { partnerSettlements } = useSettlement();
+  const { companyDistributorAgreements, partners } = useOrg();
   
   const myMachines = machines.filter(m => m.distributorId === user?.id);
-  const mySettlements = partnerSettlements.filter(s => s.distributorId === user?.id);
+  const myPartners = partners.filter(p => p.distributorId === user?.id);
+  
+  // Use the active company agreement for calculating shares on the fly for the report
+  const activeAgreement = companyDistributorAgreements.find(a => a.distributorId === user?.id && a.status === 'active');
+  const compSharePct = activeAgreement ? activeAgreement.companySharePercent / 100 : 0.4;
+  const distSharePct = activeAgreement ? activeAgreement.distributorSharePercent / 100 : 0.6;
 
+  const filteredMachines = myMachines.filter(m => {
+    if (partnerFilter === 'all') return true;
+    if (partnerFilter === 'unassigned') return !m.partnerId;
+    return m.partnerId === partnerFilter;
+  });
 
   return (
     <div className="space-y-6">
@@ -38,12 +48,13 @@ export function DistributorReports() {
           <CardTitle className="text-lg mb-4">Report Builder</CardTitle>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Select 
-              label="Report Type"
-              value={reportType}
-              onChange={(e) => setReportType(e.target.value)}
+              label="Partner Filter"
+              value={partnerFilter}
+              onChange={(e) => setPartnerFilter(e.target.value)}
               options={[
-                { label: 'Partner Settlement Report', value: 'partner_settlement' },
-                { label: 'Machine Revenue Report', value: 'revenue' },
+                { label: 'All Partners', value: 'all' },
+                { label: 'Unassigned Machines', value: 'unassigned' },
+                ...myPartners.map(p => ({ label: p.businessName, value: p.id }))
               ]}
             />
             <Select 
@@ -61,58 +72,44 @@ export function DistributorReports() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          {reportType === 'partner_settlement' && (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Settlement Number</TableHead>
-                  <TableHead>Partner</TableHead>
-                  <TableHead className="text-right">Distributor Entitlement</TableHead>
-                  <TableHead className="text-right">Distributor Retained</TableHead>
-                  <TableHead className="text-right">Partner Entitlement</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {mySettlements.map((s) => (
-                  <TableRow key={s.id}>
-                    <TableCell className="font-medium text-indigo-600">{s.settlementNumber}</TableCell>
-                    <TableCell>{s.partnerName}</TableCell>
-                    <TableCell className="text-right text-slate-500">₹{s.eligibleRevenue.toLocaleString()}</TableCell>
-                    <TableCell className="text-right text-emerald-600 font-medium">₹{s.distributorRetainedAmount.toLocaleString()}</TableCell>
-                    <TableCell className="text-right font-bold text-slate-900">₹{s.partnerPayableAmount.toLocaleString()}</TableCell>
-                  </TableRow>
-                ))}
-                {mySettlements.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-slate-500">
-                      No partner settlements found.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          )}
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Machine Code</TableHead>
+                <TableHead>Partner Name</TableHead>
+                <TableHead>Model Name</TableHead>
+                <TableHead className="text-right">Gross Revenue Before Tax</TableHead>
+                <TableHead className="text-right">Company Share</TableHead>
+                <TableHead className="text-right">Distributor Share</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredMachines.map((m: any) => {
+                const partner = partners.find(p => p.id === m.partnerId);
+                const gross = m.totalRevenue || 0;
+                const cShare = gross * compSharePct;
+                const dShare = gross * distSharePct;
 
-          {reportType === 'revenue' && (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Machine Code</TableHead>
-                  <TableHead>Partner</TableHead>
-                  <TableHead className="text-right">Gross Revenue (YTD)</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {myMachines.slice(0, 10).map((m: any) => (
+                return (
                   <TableRow key={m.id}>
-                    <TableCell className="font-mono text-sm">{m.machineCode}</TableCell>
-                    <TableCell>{m.model}</TableCell>
-                    <TableCell className="text-right font-medium">₹{(m.totalRevenue || 0).toLocaleString('en-IN')}</TableCell>
+                    <TableCell className="font-mono text-sm font-medium">{m.machineCode}</TableCell>
+                    <TableCell>{partner ? partner.businessName : <span className="text-slate-400 italic">Unassigned</span>}</TableCell>
+                    <TableCell className="text-sm">{m.model}</TableCell>
+                    <TableCell className="text-right font-medium">₹{gross.toLocaleString('en-IN')}</TableCell>
+                    <TableCell className="text-right text-slate-500">₹{cShare.toLocaleString('en-IN')}</TableCell>
+                    <TableCell className="text-right text-indigo-600 font-medium">₹{dShare.toLocaleString('en-IN')}</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+                );
+              })}
+              {filteredMachines.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center py-8 text-slate-500">
+                    No machines match the selected filter.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>

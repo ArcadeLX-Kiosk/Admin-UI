@@ -1,4 +1,4 @@
-export type SettlementStatus = 'draft' | 'generated' | 'verified' | 'approved' | 'payment_pending' | 'paid' | 'closed' | 'rejected' | 'cancelled' | 'payment_failed';
+export type SettlementStatus = 'draft' | 'requested' | 'under_review' | 'generated' | 'verified' | 'approved' | 'payment_pending' | 'paid' | 'closed' | 'rejected' | 'cancelled' | 'payment_failed';
 
 export interface MachineSettlementBreakdown {
   machineId: string;
@@ -25,6 +25,8 @@ export interface CompanyDistributorSettlement {
   grossRevenue: number;
   companyShareAmount: number;
   distributorShareAmount: number;
+  gstAmount?: number;
+  totalAmount?: number;
   
   machineBreakdown: MachineSettlementBreakdown[];
   
@@ -62,6 +64,8 @@ export interface DistributorPartnerSettlement {
   eligibleRevenue: number; 
   distributorRetainedAmount: number;
   partnerPayableAmount: number;
+  gstAmount?: number;
+  totalAmount?: number;
   
   machineBreakdown: MachineSettlementBreakdown[];
   

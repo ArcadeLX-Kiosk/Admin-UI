@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+﻿import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { CompanyDistributorSettlement, DistributorReceivable, DistributorPartnerSettlement, PartnerReceivable, PaymentRecord, SettlementStatus, MachineSettlementBreakdown } from '../types/settlement';
 import { MOCK_COMPANY_SETTLEMENTS, MOCK_RECEIVABLES, MOCK_PARTNER_SETTLEMENTS, MOCK_PARTNER_RECEIVABLES, MOCK_PAYMENTS } from './settlementData';
 import { useOrg } from './orgContext';
@@ -57,7 +57,6 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     const applicableTransactions = transactions.filter(t => {
       if (!distMachineIds.has(t.machineId) || t.paymentStatus !== 'successful') return false;
       const d = new Date(t.transactionDate);
-      // month is 1-indexed in UI, getMonth() is 0-indexed
       return d.getMonth() + 1 === month && d.getFullYear() === year;
     });
 
@@ -99,9 +98,12 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       distTotal += bd.distributorShareAmount;
     });
 
+    const gst = distTotal * 0.18;
+    const total = distTotal + gst;
+
     const newSettlement: CompanyDistributorSettlement = {
-      id: `set-comp-dist-${Date.now()}`,
-      settlementNumber: `SET-${year}-${month.toString().padStart(2, '0')}-${Math.floor(Math.random() * 1000).toString().padStart(4, '0')}`,
+      id: "set-comp-dist-" + Date.now(),
+      settlementNumber: "SET-" + year + "-" + month.toString().padStart(2, '0') + "-" + Math.floor(Math.random() * 1000).toString().padStart(4, '0'),
       distributorId,
       distributorName: distributor.businessName,
       periodMonth: month,
@@ -115,10 +117,12 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       grossRevenue: grossTotal,
       companyShareAmount: compTotal,
       distributorShareAmount: distTotal,
+      gstAmount: gst,
+      totalAmount: total,
       
       machineBreakdown: Array.from(breakdownMap.values()),
       
-      status: 'generated',
+      status: 'requested',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -126,10 +130,10 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     setSettlements(prev => [newSettlement, ...prev]);
 
     addAuditLog({
-      actorId: 'company',
-      actorName: 'Company Admin',
-      actorRole: 'company',
-      action: 'Generated Company Settlement',
+      actorId: distributorId,
+      actorName: distributor.businessName,
+      actorRole: 'distributor',
+      action: 'Requested Company Settlement',
       entityType: 'settlement',
       entityId: newSettlement.id,
       distributorId: distributorId
@@ -147,10 +151,10 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       
       if (newStatus === 'approved' && s.status !== 'approved') {
         const newRec: DistributorReceivable = {
-          id: `rec-${Date.now()}`,
+          id: "rec-" + Date.now(),
           settlementId: s.id,
           distributorId: s.distributorId,
-          amount: s.distributorShareAmount,
+          amount: s.totalAmount || s.distributorShareAmount,
           status: 'payment_pending',
           createdAt: new Date().toISOString()
         };
@@ -169,7 +173,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
         addNotification({
           recipientId: s.distributorId,
           title: 'Settlement Approved',
-          message: `Settlement ${s.settlementNumber} for Month ${s.periodMonth} has been approved`,
+          message: "Settlement " + s.settlementNumber + " for Month " + s.periodMonth + " has been approved",
           category: 'settlement',
           relatedEntityId: id,
           relatedEntityType: 'settlement'
@@ -190,7 +194,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     setReceivables(prev => prev.map(r => r.settlementId === id ? { ...r, status: 'paid' } : r));
 
     const newPayment: PaymentRecord = {
-      id: `PAY-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+      id: "PAY-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
       settlementId: id,
       senderId: 'company',
       recipientId: settlement.distributorId,
@@ -215,8 +219,8 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     
     addNotification({
       recipientId: settlement.distributorId,
-      title: 'Payment Received',
-      message: `You received ₹${receivable.amount.toLocaleString('en-IN')} for Settlement ${settlement.settlementNumber}`,
+      title: 'Payment Received from Company',
+      message: "You received ₹" + receivable.amount.toLocaleString('en-IN') + " for Settlement " + settlement.settlementNumber + "",
       category: 'payment',
       relatedEntityId: newPayment.id,
       relatedEntityType: 'payment'
@@ -227,17 +231,17 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     // 1. Get corresponding Company Settlement to ensure Distributor has been settled
     const compSettlement = settlements.find(s => s.distributorId === distributorId && s.periodMonth === month && s.periodYear === year);
     if (!compSettlement) {
-      throw new Error("Cannot generate Partner Settlement because no underlying Company Settlement exists for this period.");
+      throw new Error("Cannot request Partner Settlement because no underlying Company Settlement exists for this period.");
     }
     
-    if (compSettlement.status === 'draft' || compSettlement.status === 'generated' || compSettlement.status === 'verified') {
+    if (compSettlement.status === 'draft' || compSettlement.status === 'requested' || compSettlement.status === 'under_review' || compSettlement.status === 'generated' || compSettlement.status === 'verified') {
       throw new Error("Underlying Company Settlement must be at least Approved to calculate Partner shares securely.");
     }
 
     // 2. Prevent duplicates
     const existing = partnerSettlements.find(s => s.partnerId === partnerId && s.periodMonth === month && s.periodYear === year);
     if (existing) {
-      throw new Error("A Partner Settlement for this period already exists.");
+      throw new Error("A Partner Settlement request for this period already exists.");
     }
 
     // 3. Get Active Partner Agreement
@@ -262,11 +266,9 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     const partnerBreakdown: MachineSettlementBreakdown[] = [];
 
     applicableMachineBreakdowns.forEach(mb => {
-      // The starting point is the Distributor's share from the company settlement, not the gross
       const baseEligible = mb.distributorShareAmount;
       totalEligibleRevenue += baseEligible;
 
-      // Calculate the downstream split
       const distRetained = baseEligible * (agreement.distributorSharePercent / 100);
       const partPayable = baseEligible * (agreement.partnerSharePercent / 100);
       
@@ -276,20 +278,23 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       partnerBreakdown.push({
         machineId: mb.machineId,
         machineCode: mb.machineCode,
-        grossRevenue: mb.grossRevenue, // Kept for reference, but not used for calculation
-        companyShareAmount: distRetained, // Reusing field name for Distributor Retained
-        distributorShareAmount: partPayable, // Reusing field name for Partner Payable
+        grossRevenue: mb.grossRevenue, 
+        companyShareAmount: distRetained, 
+        distributorShareAmount: partPayable, 
         transactionCount: mb.transactionCount
       });
     });
 
+    const gst = partPayableTotal * 0.18;
+    const total = partPayableTotal + gst;
+
     const newPartnerSettlement: DistributorPartnerSettlement = {
-      id: `set-dist-part-${Date.now()}`,
-      settlementNumber: `SET-${year}-${month.toString().padStart(2, '0')}-${Math.floor(Math.random() * 1000).toString().padStart(4, '0')}`,
+      id: "set-dist-part-" + Date.now(),
+      settlementNumber: "SET-" + year + "-" + month.toString().padStart(2, '0') + "-" + Math.floor(Math.random() * 1000).toString().padStart(4, '0'),
       companySettlementId: compSettlement.id,
       distributorId,
       partnerId,
-      partnerName: partnerMachines[0]?.partnerId || 'Unknown Partner', // Hacky fallback for name
+      partnerName: partnerMachines[0]?.partnerId || 'Unknown Partner', 
       periodMonth: month,
       periodYear: year,
       
@@ -301,15 +306,29 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       eligibleRevenue: totalEligibleRevenue,
       distributorRetainedAmount: distRetainedTotal,
       partnerPayableAmount: partPayableTotal,
+      gstAmount: gst,
+      totalAmount: total,
       
       machineBreakdown: partnerBreakdown,
       
-      status: 'generated',
+      status: 'requested',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
 
     setPartnerSettlements(prev => [newPartnerSettlement, ...prev]);
+
+    addAuditLog({
+      actorId: partnerId,
+      actorName: 'Partner Admin',
+      actorRole: 'partner',
+      action: 'Requested Partner Settlement',
+      entityType: 'settlement',
+      entityId: newPartnerSettlement.id,
+      distributorId: distributorId,
+      partnerId: partnerId
+    });
+
     return newPartnerSettlement;
   };
 
@@ -319,20 +338,20 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
       
       if (newStatus === 'approved' && s.status !== 'approved') {
         const newRec: PartnerReceivable = {
-          id: `rec-p-${Date.now()}`,
+          id: "rec-p-" + Date.now(),
           settlementId: s.id,
           partnerId: s.partnerId,
           distributorId: s.distributorId,
-          amount: s.partnerPayableAmount,
+          amount: s.totalAmount || s.partnerPayableAmount,
           status: 'payment_pending',
           createdAt: new Date().toISOString()
         };
         setPartnerReceivables(r => [newRec, ...r]);
 
         addAuditLog({
-          actorId: s.distributorId,
-          actorName: 'Distributor Admin',
-          actorRole: 'distributor',
+          actorId: 'company',
+          actorName: 'Company Admin',
+          actorRole: 'company',
           action: 'Approved Partner Settlement',
           entityType: 'settlement',
           entityId: id,
@@ -343,7 +362,7 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
         addNotification({
           recipientId: s.partnerId,
           title: 'Partner Settlement Approved',
-          message: `Settlement ${s.settlementNumber} for Month ${s.periodMonth} has been approved`,
+          message: "Settlement " + s.settlementNumber + " for Month " + s.periodMonth + " has been approved by Company",
           category: 'settlement',
           relatedEntityId: id,
           relatedEntityType: 'settlement'
@@ -364,9 +383,9 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     setPartnerReceivables(prev => prev.map(r => r.settlementId === id ? { ...r, status: 'paid' } : r));
     
     const newPayment: PaymentRecord = {
-      id: `PAY-P-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+      id: "PAY-P-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
       settlementId: id,
-      senderId: settlement.distributorId,
+      senderId: 'company',
       recipientId: settlement.partnerId,
       amount: receivable.amount,
       paymentMethod: method as any,
@@ -378,9 +397,9 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     setPayments(p => [newPayment, ...p]);
 
     addAuditLog({
-      actorId: settlement.distributorId,
-      actorName: 'Distributor Admin',
-      actorRole: 'distributor',
+      actorId: 'company',
+      actorName: 'Company Admin',
+      actorRole: 'company',
       action: 'Paid Partner Settlement',
       entityType: 'payment',
       entityId: newPayment.id,
@@ -390,8 +409,8 @@ export const SettlementProvider: React.FC<{ children: ReactNode }> = ({ children
     
     addNotification({
       recipientId: settlement.partnerId,
-      title: 'Payment Received',
-      message: `You received ₹${receivable.amount.toLocaleString('en-IN')} for Settlement ${settlement.settlementNumber}`,
+      title: 'Payment Received from Company',
+      message: "You received ₹" + receivable.amount.toLocaleString('en-IN') + " for Settlement " + settlement.settlementNumber + "",
       category: 'payment',
       relatedEntityId: newPayment.id,
       relatedEntityType: 'payment'
