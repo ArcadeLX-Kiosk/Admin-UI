@@ -31,7 +31,7 @@ export function MachineDetails() {
     return <div className="p-8 text-center text-slate-500">Machine not found.</div>;
   }
 
-  const agg = getMachineAggregation(machine.id);
+  const agg = getMachineAggregation(machine.machineCode);
   const recentTransactions = transactions.filter(t => t.machineId === machine.id).slice(0, 5);
 
   const getDistributorName = (dId: string) => distributors.find(d => d.id === dId)?.businessName || dId;
@@ -380,3 +380,4 @@ export function MachineDetails() {
     </div>
   );
 }
+

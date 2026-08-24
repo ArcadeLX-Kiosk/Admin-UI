@@ -143,7 +143,7 @@ export function CompanyRevenueDashboard() {
             </TableHeader>
             <TableBody>
               {machines.filter(m => m.status === 'active' || m.status === 'installed').map(m => {
-                const agg = getMachineAggregation(m.id);
+                const agg = getMachineAggregation(m.machineCode);
                 if (agg.totalRevenue === 0) return null; // Skip machines with no revenue for cleaner demo
                 
                 return (
@@ -174,3 +174,4 @@ export function CompanyRevenueDashboard() {
     </div>
   );
 }
+

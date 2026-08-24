@@ -56,7 +56,7 @@ export function DistributorDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Distributor Dashboard</h1>
-          <p className="text-slate-500">Track your entitlements, machine performance, and partner payouts.</p>
+          <p className="text-slate-500">Track your entitlements and machine performance.</p>
         </div>
       </div>
 
@@ -96,16 +96,6 @@ export function DistributorDashboard() {
           title="Pending Company Settlement"
           value={pendingCompanySettlements.toString()}
           icon={<AlertCircle className="w-6 h-6 text-yellow-600" />}
-        />
-        <StatCard
-          title="Paid to Partners"
-          value={`₹${paidToPartners.toLocaleString('en-IN')}`}
-          icon={<FileText className="w-6 h-6 text-slate-600" />}
-        />
-        <StatCard
-          title="Pending Partner Settlements"
-          value={pendingPartnerSettlements.toString()}
-          icon={<AlertCircle className="w-6 h-6 text-orange-600" />}
         />
       </div>
 
@@ -162,3 +152,4 @@ export function DistributorDashboard() {
     </div>
   );
 }
+

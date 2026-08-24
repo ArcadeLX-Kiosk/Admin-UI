@@ -15,9 +15,9 @@ export function PartnerRevenueDashboard() {
   
   // Partner machines filter
   const myMachines = machines.filter(m => m.partnerId === user?.id);
-  const myMachineIds = new Set(myMachines.map(m => m.id));
+  const myMachineCodes = new Set(myMachines.map(m => m.machineCode));
 
-  const myTransactions = transactions.filter(t => myMachineIds.has(t.machineId) && t.paymentStatus === 'successful');
+  const myTransactions = transactions.filter(t => myMachineCodes.has(t.machineId) && t.paymentStatus === 'successful');
 
   const totalRevenue = myTransactions.reduce((acc, curr) => acc + curr.amount, 0);
   
@@ -95,7 +95,7 @@ export function PartnerRevenueDashboard() {
             </TableHeader>
             <TableBody>
               {myMachines.map(m => {
-                const agg = getMachineAggregation(m.id);
+                const agg = getMachineAggregation(m.machineCode);
                 if (agg.totalRevenue === 0) return null; 
                 
                 return (
@@ -118,3 +118,4 @@ export function PartnerRevenueDashboard() {
     </div>
   );
 }
+
