@@ -6,7 +6,7 @@ import { LayoutDashboard, Users, MonitorSmartphone, Package, ShoppingCart, India
 const navigation = [
   { name: 'Overview', href: '/distributor/dashboard', icon: <LayoutDashboard /> },
   { name: 'Partners', href: '/distributor/partners', icon: <Users /> },
-  { name: 'Machines', href: '/distributor/machines', icon: <MonitorSmartphone /> },
+  { name: 'Kiosks', href: '/distributor/machines', icon: <MonitorSmartphone /> },
   { name: 'Orders', href: '/distributor/orders', icon: <ShoppingCart /> },
   { name: 'Revenue', href: '/distributor/revenue', icon: <IndianRupee /> },
   { name: 'Settlements', href: '/distributor/settlements', icon: <FileText /> },

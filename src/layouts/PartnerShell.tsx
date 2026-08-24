@@ -5,7 +5,7 @@ import { LayoutDashboard, MonitorSmartphone, ShoppingCart, IndianRupee, FileText
 
 const navigation = [
   { name: 'Overview', href: '/partner/dashboard', icon: <LayoutDashboard /> },
-  { name: 'Machines', href: '/partner/machines', icon: <MonitorSmartphone /> },
+  { name: 'Kiosks', href: '/partner/machines', icon: <MonitorSmartphone /> },
   { name: 'Orders', href: '/partner/orders', icon: <ShoppingCart /> },
   { name: 'Revenue', href: '/partner/revenue', icon: <IndianRupee /> },
   { name: 'Settlements', href: '/partner/settlements', icon: <FileText /> },

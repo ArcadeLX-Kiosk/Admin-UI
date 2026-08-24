@@ -3,7 +3,7 @@ import { Machine } from '../types/machine';
 export const MOCK_MACHINES = [
   {
     "id": "KSK-2026-000001",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -26,7 +26,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000002",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -49,7 +49,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000003",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -72,7 +72,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000004",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -95,7 +95,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000005",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -118,7 +118,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000006",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -141,7 +141,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000007",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -164,7 +164,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000008",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -187,7 +187,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000009",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -210,7 +210,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000010",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -233,7 +233,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000011",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -256,7 +256,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000012",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -279,7 +279,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000013",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -302,7 +302,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000014",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -325,7 +325,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000015",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-1",
@@ -348,7 +348,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000016",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -371,7 +371,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000017",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -394,7 +394,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000018",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -417,7 +417,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000019",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -440,7 +440,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000020",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -463,7 +463,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000021",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -486,7 +486,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000022",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -509,7 +509,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000023",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -532,7 +532,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000024",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -555,7 +555,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000025",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -578,7 +578,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000026",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -601,7 +601,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000027",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -624,7 +624,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000028",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -647,7 +647,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000029",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -670,7 +670,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000030",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -693,7 +693,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000031",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -716,7 +716,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000032",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -739,7 +739,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000033",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -762,7 +762,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000034",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -785,7 +785,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000035",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-1",
     "partnerId": "part-2",
@@ -808,7 +808,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000036",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-2",
     "partnerId": "part-3",
@@ -831,7 +831,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000037",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-2",
     "partnerId": "part-3",
@@ -854,7 +854,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000038",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-2",
     "partnerId": "part-3",
@@ -877,7 +877,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000039",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-2",
     "partnerId": "part-3",
@@ -900,7 +900,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000040",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-2",
     "partnerId": "part-3",
@@ -923,7 +923,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000041",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-2",
     "partnerId": "part-3",
@@ -946,7 +946,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000042",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-2",
     "partnerId": "part-3",
@@ -969,7 +969,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000043",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-2",
     "partnerId": "part-3",
@@ -992,7 +992,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000044",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-2",
     "partnerId": "part-3",
@@ -1015,7 +1015,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000045",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-2",
     "partnerId": "part-3",
@@ -1038,7 +1038,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000046",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-3",
     "partnerId": null,
@@ -1061,7 +1061,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000047",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-3",
     "partnerId": null,
@@ -1084,7 +1084,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000048",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-3",
     "partnerId": null,
@@ -1107,7 +1107,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000049",
-    "model": "Kiosk-V1-Lite",
+    "model": "Arcade-LX B2C",
     "status": "installed",
     "distributorId": "dist-3",
     "partnerId": null,
@@ -1130,7 +1130,7 @@ export const MOCK_MACHINES = [
   },
   {
     "id": "KSK-2026-000050",
-    "model": "Kiosk-V2-Pro",
+    "model": "Arcade-LX B2B",
     "status": "installed",
     "distributorId": "dist-3",
     "partnerId": null,

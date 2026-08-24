@@ -7,7 +7,7 @@ export const MOCK_ORDERS = [
     "requestedByRole": "distributor",
     "requestedTo": "company",
     "requestedToRole": "company",
-    "machineModel": "Kiosk-V2-Pro",
+    "machineModel": "Arcade-LX B2B",
     "quantity": 10,
     "deliveryAddress": "123 Tech Park, Block C, Bengaluru",
     "status": "requested",

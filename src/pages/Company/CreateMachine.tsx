@@ -20,7 +20,7 @@ export function CreateMachine() {
   const predictedCode = `KSK-${year}-${nextNum}`;
 
   const [formData, setFormData] = useState({
-    model: 'Kiosk-Pro V1',
+    model: 'Arcade-LX B2C',
     serialNumber: `SN-KSK-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
     manufactureDate: new Date().toISOString().split('T')[0],
     firmwareVersion: 'v1.0.0',
@@ -83,10 +83,11 @@ export function CreateMachine() {
                 value={formData.model} 
                 onChange={handleChange}
                 options={[
-                  { label: 'Kiosk-Pro V1', value: 'Kiosk-Pro V1' },
-                  { label: 'Kiosk-Lite V2', value: 'Kiosk-Lite V2' },
-                  { label: 'Arcade-Max', value: 'Arcade-Max' },
-                  { label: 'Vending-Smart', value: 'Vending-Smart' },
+                  { label: 'Arcade-LX B2B', value: 'Arcade-LX B2B' },
+                  { label: 'Arcade-LX B2C', value: 'Arcade-LX B2C' },
+                  { label: 'Arcade-LX Corporate', value: 'Arcade-LX Corporate' },
+                  { label: 'Arcade-LX Kids', value: 'Arcade-LX Kids' },
+                  { label: 'Arcade-LX Healthcare', value: 'Arcade-LX Healthcare' },
                 ]}
               />
               <Input required label="Serial Number" name="serialNumber" value={formData.serialNumber} onChange={handleChange} />

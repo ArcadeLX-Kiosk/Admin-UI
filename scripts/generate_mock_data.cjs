@@ -219,7 +219,7 @@ const generateData = () => {
     const machineId = `KSK-2026-${codeStr}`;
     let dId = DIST_1;
     let pId = PART_1;
-    
+
     if (i > 15 && i <= 35) {
       pId = 'part-2';
     } else if (i > 35 && i <= 45) {
@@ -233,7 +233,7 @@ const generateData = () => {
     machines.push({
       id: machineId,
       code: machineId,
-      model: i % 2 === 0 ? 'Kiosk-V2-Pro' : 'Kiosk-V1-Lite',
+      model: i % 2 === 0 ? 'Arcade-LX B2B' : 'Arcade-LX B2C',
       status: 'installed',
       distributorId: dId,
       partnerId: pId,
@@ -246,7 +246,7 @@ const generateData = () => {
       totalTransactions: 0,
     });
   }
-  
+
   // Specifically set machine KSK-2026-000001 details to guarantee the hero path
   machines[0].id = MACHINE_1;
   machines[0].code = MACHINE_1;
@@ -260,10 +260,10 @@ const generateData = () => {
     // Generate transactions for machines. For the hero machine (KSK-2026-000001) in August (month 8), we explicitly want 75,000 total.
     for (const machine of machines) {
       const isHeroMachine = machine.id === MACHINE_1;
-      
+
       let txsThisMonth = 30;
       let amountPerTx = 50; // Random defaults
-      
+
       if (isHeroMachine && month === 8) {
         // We need 75,000. Let's do 75 transactions of 1000 each to keep it simple, or 150 txs of 500
         txsThisMonth = 150;
@@ -272,12 +272,12 @@ const generateData = () => {
         txsThisMonth = Math.floor(Math.random() * 50) + 10;
         amountPerTx = Math.floor(Math.random() * 10) * 100 + 100; // 100 to 1000
       }
-      
+
       let dailySum = 0;
       for (let d = 1; d <= txsThisMonth; d++) {
-        const day = (d % 28) + 1; 
+        const day = (d % 28) + 1;
         const dateStr = `2026-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T12:00:00Z`;
-        
+
         revenues.push({
           id: `tx-${txIdCounter++}`,
           machineId: machine.id,
@@ -292,7 +292,7 @@ const generateData = () => {
       }
       machine.totalRevenue += dailySum;
       machine.totalTransactions += txsThisMonth;
-      
+
       const pId = machine.partnerId;
       const dId = machine.distributorId;
       if (pId) {
@@ -313,30 +313,30 @@ const generateData = () => {
   const receivables = [];
   const partnerReceivables = [];
   const orders = [];
-  
+
   // Calculate company settlements for August (Month 8)
   // Let's create an approved but UNPAID settlement for FunZone for August
   // Actually, the user wants the demo to be: Company pays Distributor -> Distributor pays Partner
   // Let's make August generated but unapproved/unpaid? 
   // User flow: "Company Login -> Dashboard -> Pay Distributor -> Distributor Login -> Pay Partner"
   // So Company Settlement should be 'payment_pending'.
-  
+
   let companyFunzoneSettlementAmount = 0;
   let distFunzoneEntitlement = 0;
   const funzoneMachineBreakdown = [];
-  
+
   // Build machine breakdown for FunZone for August
-  for(const m of machines.filter(m => m.distributorId === DIST_1)) {
+  for (const m of machines.filter(m => m.distributorId === DIST_1)) {
     const augRevs = revenues.filter(r => r.machineId === m.id && r.timestamp.startsWith('2026-08'));
     const totalRev = augRevs.reduce((acc, curr) => acc + curr.amount, 0);
-    if(totalRev > 0) {
+    if (totalRev > 0) {
       // FunZone agreement is 40% company / 60% distributor
       const cShare = totalRev * 0.40;
       const dShare = totalRev * 0.60;
-      
+
       companyFunzoneSettlementAmount += totalRev;
       distFunzoneEntitlement += dShare;
-      
+
       funzoneMachineBreakdown.push({
         machineId: m.id,
         machineCode: m.code,
@@ -364,7 +364,7 @@ const generateData = () => {
     agreementVersion: 1,
     createdAt: '2026-09-01T10:00:00Z',
   });
-  
+
   receivables.push({
     id: 'cr-aug-dist1',
     distributorId: DIST_1,
@@ -376,7 +376,7 @@ const generateData = () => {
     dueDate: '2026-09-10T00:00:00Z',
     createdAt: '2026-09-02T10:00:00Z'
   });
-  
+
   distributors.find(d => d.id === DIST_1).pendingSettlement = distFunzoneEntitlement;
 
   // Let's create an order in 'requested' state so the company can approve it in the demo
@@ -386,7 +386,7 @@ const generateData = () => {
     requestedByRole: 'distributor',
     requestedTo: 'company',
     requestedToRole: 'company',
-    machineModel: 'Kiosk-V2-Pro',
+    machineModel: 'Arcade-LX B2B',
     quantity: 10,
     deliveryAddress: '123 Tech Park, Block C, Bengaluru',
     status: 'requested',
@@ -399,12 +399,12 @@ const generateData = () => {
     const content = `${typeImports}\n\nexport const ${varName} = ${JSON.stringify(data, null, 2)};\n`;
     fs.writeFileSync(path.join(srcMockPath, fileName), content);
   }
-  
+
   generateFile('data.ts', 'MOCK_DISTRIBUTORS', distributors, `import { Distributor, Partner, CompanyDistributorAgreement, DistributorPartnerAgreement } from '../types/organization';\n\nexport const MOCK_PARTNERS: Partner[] = ${JSON.stringify(partners, null, 2)};\n\nexport const MOCK_COMPANY_DISTRIBUTOR_AGREEMENTS: CompanyDistributorAgreement[] = ${JSON.stringify(companyDistAgreements, null, 2)};\n\nexport const MOCK_DISTRIBUTOR_PARTNER_AGREEMENTS: DistributorPartnerAgreement[] = ${JSON.stringify(distPartAgreements, null, 2)};`);
   generateFile('machineData.ts', 'MOCK_MACHINES', machines, `import { Machine } from '../types/machine';`);
   generateFile('orderData.ts', 'MOCK_ORDERS', orders, `import { Order } from '../types/order';`);
   generateFile('revenueData.ts', 'MOCK_REVENUE_TRANSACTIONS', revenues, `import { RevenueTransaction } from '../types/revenue';`);
-  
+
   // Note: SettlementData needs multiple exports
   const settlementContent = `import { CompanyDistributorSettlement, DistributorPartnerSettlement, PaymentRecord, Receivable, PartnerReceivable } from '../types/settlement';\n\nexport const MOCK_COMPANY_SETTLEMENTS: CompanyDistributorSettlement[] = ${JSON.stringify(companySettlements, null, 2)};\n\nexport const MOCK_PARTNER_SETTLEMENTS: DistributorPartnerSettlement[] = ${JSON.stringify(partnerSettlements, null, 2)};\n\nexport const MOCK_PAYMENTS: PaymentRecord[] = ${JSON.stringify(payments, null, 2)};\n\nexport const MOCK_RECEIVABLES: Receivable[] = ${JSON.stringify(receivables, null, 2)};\n\nexport const MOCK_PARTNER_RECEIVABLES: PartnerReceivable[] = ${JSON.stringify(partnerReceivables, null, 2)};`;
   fs.writeFileSync(path.join(srcMockPath, 'settlementData.ts'), settlementContent);
